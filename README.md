@@ -52,10 +52,10 @@ oversight failure, not a technology failure.
 | `research/04-build-path-cjis.md` | software, cameras, CJIS and ACIC, vendors, cost, maintenance risk |
 | `research/05-acic-call-prep.md` | questions for the Arkansas Crime Information Center |
 | `design/architecture.md` | the county-owned design: one logged front door and the control for each known failure |
+| `design/sentinels.md` | one-way sentinel agents on every machine: forward-secure signed checkpoints to an outside witness, silence as the alarm, canary records |
+| `design/ceremony-protocol.md` | the key ceremony, modeled on ICANN's root key ceremony and scaled to a county: separated roles, 3-of-5 cards across five institutions, two safes, a clean offline laptop, livestreamed |
+| `design/ceremony-clerk.md` | an optional offline AI clerk for the ceremony: tools that return receipts only, a deterministic gate, and kill conditions set before testing |
 | `HANDOFF.md`, `HANDOFF-UPDATE-2.md`, `CLAUDE.md` | working notes and task lists for continuing the work |
-
-**Still to add:** `design/sentinels.md`, `design/ceremony-clerk.md`, `design/ceremony-protocol.md`
-(referenced in HANDOFF-UPDATE-2.md).
 
 ## Related
 - **[civic-lightlog](https://github.com/TiredofSleep/civic-lightlog):** the open prototype of the
