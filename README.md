@@ -57,6 +57,7 @@ oversight failure, not a technology failure.
 | `design/ceremony-protocol.md` | the key ceremony, modeled on ICANN's root key ceremony and scaled to a county: separated roles, 3-of-5 cards across five institutions, two safes, a clean offline laptop, livestreamed |
 | `design/ceremony-clerk.md` | an optional offline AI clerk for the ceremony: tools that return receipts only, a deterministic gate, and kill conditions set before testing |
 | `HANDOFF.md`, `HANDOFF-UPDATE-2.md`, `CLAUDE.md` | working notes and task lists for continuing the work |
+| `tools/ceremony/script.json` | the draft key-ceremony step list: read-aloud lines, witness checks, stop conditions (tooling not built yet) |
 | `log/` | session logs: how the hub was built and published, and what's still unfinished |
 
 ## Related
