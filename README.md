@@ -51,6 +51,7 @@ oversight failure, not a technology failure.
 | `research/03-alpr-case-law.md` | the case law, and why Arkansas statute is the real enforcement spine |
 | `research/04-build-path-cjis.md` | software, cameras, CJIS and ACIC, vendors, cost, maintenance risk |
 | `research/05-acic-call-prep.md` | questions for the Arkansas Crime Information Center |
+| `research/06-encryption-discussion.md` | transcript: why better encryption isn't the answer (deletion and witnessing are), and where the sentinels came from |
 | `design/architecture.md` | the county-owned design: one logged front door and the control for each known failure |
 | `design/sentinels.md` | one-way sentinel agents on every machine: forward-secure signed checkpoints to an outside witness, silence as the alarm, canary records |
 | `design/ceremony-protocol.md` | the key ceremony, modeled on ICANN's root key ceremony and scaled to a county: separated roles, 3-of-5 cards across five institutions, two safes, a clean offline laptop, livestreamed |
