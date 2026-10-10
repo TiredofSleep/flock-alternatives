@@ -1,0 +1,282 @@
+<title>ALPR Blueprint</title>
+<style>
+  /* Layout: long-form strategy document, single column with sticky nav; kill-conditions called out in amber so the honest seams stay visible */
+  :root{
+    --bg:#eef1f4;
+    --surface:#ffffff;
+    --surface-2:#f5f8fa;
+    --ink:#141a20;
+    --ink-soft:#4a5560;
+    --line:#d3dae1;
+    --accent:#1f5f8b;
+    --accent-soft:#e3edf4;
+    --win:#1b6e4b;
+    --win-bg:#e5f3ec;
+    --kill:#8a4b00;
+    --kill-bg:#f8ecd6;
+    --kill-line:#c98a2e;
+    --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+    --body:"Public Sans",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0e1319;--surface:#161c24;--surface-2:#1b232d;--ink:#e8edf2;--ink-soft:#9fadba;
+    --line:#2a343f;--accent:#6fb3dc;--accent-soft:#1a2b38;
+    --win:#5bc08c;--win-bg:#13261d;--kill:#e2b05a;--kill-bg:#2a2210;--kill-line:#6b5420;
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1319;--surface:#161c24;--surface-2:#1b232d;--ink:#e8edf2;--ink-soft:#9fadba;
+    --line:#2a343f;--accent:#6fb3dc;--accent-soft:#1a2b38;
+    --win:#5bc08c;--win-bg:#13261d;--kill:#e2b05a;--kill-bg:#2a2210;--kill-line:#6b5420;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.58;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:52rem;margin:0 auto;padding-inline:16px;padding-block:28px 64px}
+  header.mast{border-bottom:3px solid var(--ink);padding-bottom:16px;margin-bottom:6px}
+  .kicker{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;font-weight:700;color:var(--accent)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,6vw,2.9rem);line-height:1.02;margin:.22em 0 .18em;text-wrap:balance}
+  .sub{color:var(--ink-soft);font-size:1rem;max-width:42rem}
+  .meta{font-family:var(--display);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-top:12px}
+  nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:6px;padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:24px}
+  nav a{font-family:var(--display);font-size:.71rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;color:var(--ink-soft);padding:5px 9px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+  nav a:hover{color:var(--accent);border-color:var(--accent)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px 22px 24px;margin-bottom:18px}
+  h2{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:0 0 6px;display:flex;align-items:baseline;gap:10px;text-wrap:balance}
+  h2 .n{font-size:.8rem;color:var(--accent);font-weight:700;flex-shrink:0}
+  .lede{color:var(--ink-soft);font-size:.92rem;margin:0 0 16px}
+  h3{font-family:var(--display);font-weight:700;font-size:1.02rem;margin:20px 0 6px}
+  p{margin:0 0 11px}
+  strong{font-weight:700}
+  em{font-style:italic}
+  .thesis{border-left:4px solid var(--accent);background:var(--accent-soft);padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:14px;font-size:1.02rem}
+  .thesis b{font-family:var(--display)}
+  .pillar{border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-bottom:14px}
+  .pillar .top{padding:13px 16px;background:var(--surface-2)}
+  .pillar .ptitle{font-family:var(--display);font-weight:800;font-size:1rem;display:flex;align-items:baseline;gap:8px}
+  .pillar .ptitle .pn{color:var(--accent);font-size:.8rem}
+  .pillar .claim{font-size:.9rem;margin:4px 0 0;color:var(--ink-soft)}
+  .kill{background:var(--kill-bg);border-top:1px solid var(--kill-line);padding:12px 16px}
+  .kill .klabel{font-family:var(--display);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--kill);display:block;margin-bottom:4px}
+  .kill p{font-size:.89rem;margin:0}
+  .build{background:var(--win-bg);border-top:1px solid color-mix(in srgb,var(--win) 30%,transparent);padding:12px 16px}
+  .build .blabel{font-family:var(--display);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--win);display:block;margin-bottom:4px}
+  .build p{font-size:.89rem;margin:0}
+  ul.clean{margin:0 0 10px;padding-left:1.15em}
+  ul.clean li{margin-bottom:7px;font-size:.93rem}
+  .stand{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+  .stat{border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--surface-2);min-width:0}
+  .stat .fig{font-family:var(--display);font-weight:800;font-size:1.5rem;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1}
+  .stat .cap{font-size:.78rem;color:var(--ink-soft);margin-top:5px}
+  table{width:100%;border-collapse:collapse;font-size:.86rem;margin:10px 0}
+  .scroll{overflow-x:auto}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;min-width:0}
+  th{font-family:var(--display);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+  td.k{color:var(--kill);font-weight:600}
+  .flag{background:var(--kill-bg);border-left:4px solid var(--kill-line);padding:11px 14px;border-radius:0 6px 6px 0;font-size:.89rem;margin:12px 0}
+  .flag b{color:var(--kill);font-family:var(--display);text-transform:uppercase;font-size:.7rem;letter-spacing:.05em}
+  .phase{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border-bottom:0}
+  .phase .ph{font-family:var(--display);font-weight:800;color:var(--accent);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;width:5.5rem}
+  .phase .pbody{min-width:0}
+  .phase .pbody .ph-t{font-weight:700;font-size:.93rem}
+  .phase .pbody p{font-size:.88rem;margin:3px 0 0;color:var(--ink-soft)}
+  .src{font-size:.82rem;color:var(--ink-soft)}
+  .src a{color:var(--accent)}
+  footer{color:var(--ink-soft);font-size:.78rem;text-align:center;margin-top:24px;font-family:var(--display);text-transform:uppercase;letter-spacing:.05em}
+  a{color:var(--accent)}
+  @media (max-width:560px){.stand{grid-template-columns:1fr}.phase{flex-direction:column;gap:3px}.phase .ph{width:auto}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+
+<div class="wrap">
+  <header class="mast">
+    <div class="kicker">From Idea to Running System</div>
+    <h1>ALPR Blueprint</h1>
+    <p class="sub">What it takes to make a county-owned, logged-access plate-reader system real — the thesis, the prior art, the legal spine that actually holds, and the four honest ways it dies if you build it wrong.</p>
+    <div class="meta">Clark County, AR · companion to the Meeting Brief · Oct 2026</div>
+  </header>
+
+  <nav>
+    <a href="#thesis">Thesis</a>
+    <a href="#stand">Where You Stand</a>
+    <a href="#pillars">5 Pillars + Kill-Conditions</a>
+    <a href="#law">Legal Spine</a>
+    <a href="#build">Build Path</a>
+    <a href="#gov">Governance to Copy</a>
+    <a href="#cost">Cost &amp; the Trap</a>
+    <a href="#plan">Path to Reality</a>
+  </nav>
+
+  <section id="thesis">
+    <h2><span class="n">00</span> The thesis, refined to its load-bearing core</h2>
+    <p class="lede">Four conversations stripped this down to one defensible claim. Say it this way.</p>
+    <div class="thesis">
+      <b>We can't keep anyone out — data crosses wires and the feds have lawful means.</b> So we don't sell secrecy. We build one logged front door, make every other door a crime our own people answer for, and build the log airtight enough that an outsider can prove whether the door was used. The sell isn't <em>"they can't get in."</em> It's <em>"nothing happens to this county's data that someone outside this department can't see."</em>
+    </div>
+    <p>Flock's actual product was never the camera. It was the central brain in Atlanta you cannot audit. When ICE pulled thousands of lookups through that network, departments found out <em>months later from a journalist</em> — because the architecture is built so they can't know. You're not offering higher walls. You're offering the one thing Flock structurally cannot: knowability.</p>
+  </section>
+
+  <section id="stand">
+    <h2><span class="n">01</span> Where you actually stand</h2>
+    <p class="lede">The demand is proven. The thing you'd build is not. Both facts matter.</p>
+    <div class="stand">
+      <div class="stat"><div class="fig">214</div><div class="cap">cities/towns that dropped Flock since 2021 — 90 in Aug 2026 alone (Secure Justice)</div></div>
+      <div class="stat"><div class="fig">0</div><div class="cap">of them that replaced it with a self-hosted, locally-owned system</div></div>
+      <div class="stat"><div class="fig">1</div><div class="cap">county (Bernalillo NM) whose stated replacement criteria read exactly like your spec — but still a vendor (Axon)</div></div>
+    </div>
+    <p>The exodus is real and large, and the <strong>feature list buyers now want is already written</strong> — Bernalillo County's sheriff moved off Flock demanding county-controlled data, no national pooling, sharing off by default and revocable, role-based access, and audit logs of who searched what and why. That's your pitch, articulated by a sheriff, for you.</p>
+    <p>But every one of those 214 jumped to <em>another landlord</em> — Axon, Rekor — never to ownership. Nobody self-hosts. That cuts both ways: <strong>you'd genuinely be first on the ownership model</strong> (a strong, novel position), and <strong>there's no turnkey example to copy</strong> (you carry the maintenance burden Flock's subscription hides). Lead with "proven tech, novel ownership," never "nobody's ever done this" — unprecedented makes a sheriff nervous.</p>
+    <p class="flag"><b>What made Flock radioactive is exactly what you delete</b> &nbsp;The tipping point wasn't privacy abstractions — it was 404 Media showing local PDs ran Flock lookups for ICE, and a Texas officer searching nationwide for a woman who'd self-managed an abortion. A national pool a county can't control <em>is</em> the liability. Your architecture removes it at the root.</p>
+  </section>
+
+  <section id="pillars">
+    <h2><span class="n">02</span> Five pillars — and the kill-condition for each</h2>
+    <p class="lede">Every pillar has working prior art. Every pillar also has a documented way it goes hollow. The research is unanimous: these systems never fail on the cryptography. They fail on the review. Build each pillar <em>with</em> its kill-condition closed, or you've rebuilt Flock with worse security.</p>
+
+    <div class="pillar">
+      <div class="top">
+        <div class="ptitle"><span class="pn">1</span> Tamper-evident log</div>
+        <p class="claim">A hash-chained, append-only log — the same machinery as Certificate Transparency (Google's Trillian, open source, runs on an ordinary database). Proven, free, steal-this architecture.</p>
+      </div>
+      <div class="kill">
+        <span class="klabel">Dies when</span>
+        <p>No one outside your department ever checks it. A hash chain only proves consistency to someone comparing signed roots against an earlier copy. If your one admin holds the signing key and the DB, they can rewrite and re-sign — "tamper-evident to nobody." <strong>Fix: an external witness</strong> (county clerk, a university, a citizen board) periodically pins the root hash; publish the current root somewhere public and timestamped. Cheap, and it's the whole difference between real and theater.</p>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="top">
+        <div class="ptitle"><span class="pn">2</span> One front door (individual auth)</div>
+        <p class="claim">Every access through one authenticated path, no standing outside logins, no nationwide-lookup toggle because you never built one. N-DEx proves unique-login + purpose-code access works.</p>
+      </div>
+      <div class="kill">
+        <span class="klabel">Dies when</span>
+        <p>Credentials are shared. A DEA agent ran immigration searches using a <em>local Palos Heights officer's password</em> — the log faithfully recorded the wrong person. A per-user log is fiction the moment accounts are shared. <strong>Fix: enforced individual authentication, hardware MFA, zero shared service accounts.</strong> CJIS already demands MFA — lean on that requirement, don't fight it.</p>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="top">
+        <div class="ptitle"><span class="pn">3</span> A reason on every query</div>
+        <p class="claim">Who, when, what plate, and <em>why</em> — the stated reason is the whole evidentiary value. The Danville logs are damning precisely because the reason field said "immigration."</p>
+      </div>
+      <div class="kill">
+        <span class="klabel">Dies when</span>
+        <p>The reason is unvalidated. Flock's free-text field filled with "idk," "LMAO," "asdfg," "TBD" — a Goshen IN search justified by "idk" hit <strong>82,413 cameras</strong>; 6,300+ searches said "TBD." Flock's "fix" — a dropdown of categories — EFF called <em>a loss for transparency</em>, because one-click rubber-stamps beat forced prose. <strong>Fix: validate every query against a real, open case number in a case system.</strong> No case, no search. That's the control neither free-text nor dropdowns give.</p>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="top">
+        <div class="ptitle"><span class="pn">4</span> Unauthorized access = a crime</div>
+        <p class="claim">The ordinance makes any access outside the front door punishable misconduct for your own personnel. California's SB 34 already makes logging the law.</p>
+      </div>
+      <div class="kill">
+        <span class="klabel">Dies when</span>
+        <p>Nobody reads the logs. The California State Auditor found agencies under SB 34 did <em>"little to no auditing,"</em> one sheriff shared data with 1,000+ entities across 44 states — the law existed and was ignored for years because review never happened. CJIS's own audit cycle is <strong>every three years</strong>; that's how abuse runs 11 months before anyone looks. <strong>Fix: fund and schedule actual log review on a cadence of days, by someone who isn't the searcher.</strong> The review function — not the log — is what every documented failure lacked.</p>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="top">
+        <div class="ptitle"><span class="pn">5</span> Publicly reported</div>
+        <p class="claim">Aggregate stats public by default; Act 668 already mandates twice-yearly reports. Oakland and Seattle publish annual ALPR reports to oversight bodies.</p>
+      </div>
+      <div class="kill">
+        <span class="klabel">Dies when</span>
+        <p>You publish only the flattering aggregates. Flock's transparency portals show vehicle counts and hotlist hits — and conspicuously <em>not</em> per-search reasons, sharing recipients, or audit findings: exactly the fields that would have surfaced the ICE and abortion abuses without a records-request fight. Every real abuse surfaced via FOIA and journalists, never a dashboard. <strong>Fix: publish the sharing/recipient log and anomaly counts, not just detections.</strong> Those are the fields Flock omits — making them public <em>is</em> your differentiator.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="law">
+    <h2><span class="n">03</span> The legal spine — and a correction I owe you</h2>
+    <p class="lede">I told you earlier that unlogged access "warrants federal appeal / suppression." The research says that's weaker than I framed it on constitutional grounds. Here's the honest version, because you need to know exactly how strong the lever is before you lean on it in a room.</p>
+
+    <h3>The Fourth Amendment path is weak — don't build on it</h3>
+    <p>The dominant federal trend is that an ALPR query is <strong>not a search and needs no warrant</strong> — so there's usually nothing to suppress, log or no log. The Fifth Circuit said exactly this in <em>United States v. Porter</em> (2026); a Virginia federal court denied an ALPR suppression motion in <em>Martin</em> (2024); a judge let Norfolk's 170+ Flock cameras stand in <em>Schmidt</em> (2026, "not today"). The "mosaic theory" from <em>Carpenter</em> — that enough tracking becomes a search — is alive but narrow, mostly in <em>state</em> constitutional law (Massachusetts' <em>McCarthy</em>), and even there the evidence came in. <strong>No reported case has ever suppressed ALPR evidence on Fourth Amendment grounds, and none has treated the absence of a log entry as the trigger.</strong> Claiming "inadmissible" oversells it.</p>
+
+    <h3>The Arkansas statute is the spine — and it's already most of the way there</h3>
+    <p>This is the good news, and it's substantial. Arkansas's own ALPR Act (A.C.A. §§ 12-12-1801–1808, as amended by <strong>Act 668 of 2025</strong>) already contains the enforcement hooks the Constitution won't give you:</p>
+    <ul class="clean">
+      <li><strong>§ 12-12-1803:</strong> ALPR use is unlawful <em>except</em> for enumerated law-enforcement purposes. The default is "illegal" — exactly your framing, already in state law.</li>
+      <li><strong>§ 12-12-1804:</strong> 150-day retention cap (60 for private); investigation data destroyed when the case closes.</li>
+      <li><strong>Government "shall not sell, trade, or exchange" plate data;</strong> it can compel private data only by subpoena. Your no-selling principle is statute, not aspiration.</li>
+      <li><strong>§ 12-12-1805:</strong> agencies must keep semiannual stats (scans, lists checked, matches, arrests) for 18 months <em>and publish</em> their retain/destroy policy — and <strong>a court may exclude evidence if the required policy isn't published.</strong> There's your exclusion hook.</li>
+      <li><strong>§ 12-12-1806:</strong> bars evidence whose disclosure would violate the subchapter.</li>
+      <li><strong>§ 12-12-1807:</strong> private right of action — <strong>$1,000 liquidated damages or actual, whichever is greater.</strong> A misused search has a price tag with a plaintiff attached.</li>
+    </ul>
+    <p class="flag"><b>The move</b> &nbsp;To make "unlogged access = suppressible" a reliable rule rather than a hope, write it into the <strong>county ordinance</strong> with an express exclusion clause and an audit-trail retention mandate — bolted onto the statutory hooks Arkansas already provides. The log's real job is to make misuse <em>provable</em> (powering the §1807 damages and the ordinance remedy) and to make the clean evidence that <em>did</em> come through the front door court-proof. That's a prosecutor's argument for your system, not against it.</p>
+    <p class="src">Reasoning from current law, not legal advice — this area is unsettled and a lawyer should draft the ordinance. The 4th Circuit's <em>Schmidt</em> appeal could move things.</p>
+  </section>
+
+  <section id="build">
+    <h2><span class="n">04</span> Build path — and the one architectural decision that saves you</h2>
+    <p class="lede">The hardware and open-source software are mature enough. The thing that decides whether you drown in compliance is where you draw one line.</p>
+
+    <h3>Draw the line at the hotlist</h3>
+    <p>The single most important architectural choice: <strong>keep NCIC/ACIC hotlist matching on the ACIC side, not inside your box.</strong> Plate <em>capture</em> plus a <em>local</em> hotlist database is <strong>not</strong> CJIS-regulated. CJIS bites the moment you cross reads against federal/state wanted data. Small Arkansas agencies run under ACIC <em>Indirect Access</em> — hits come through a dispatch center or parent agency with a terminal. Design your system as capture + local-hotlist + audit log, and let NCIC matching happen through the existing ACIC-connected workflow. That one decision keeps you out of full CJIS system accreditation.</p>
+
+    <h3>The stack that's actually maintained</h3>
+    <ul class="clean">
+      <li><strong>Don't</strong> architect around OpenALPR — it's effectively dead (last release 2018, acquired by Rekor, free tier killed).</li>
+      <li><strong>Frigate NVR</strong> is the realistic backbone — native plate recognition (YOLOv9 detector + PaddleOCR), self-hosted, open source. Good for approaches, marginal at highway speed. <strong>fast-alpr</strong> (MIT) is the best standalone library. <strong>Platerecognizer</strong> self-hosted is the pragmatic paid fallback if you want ~95% without training models.</li>
+      <li>Nobody publishes the accuracy numbers you'd want before spending public money. Expect to tune per-site and accept misreads — which is itself an argument for the audit trail.</li>
+    </ul>
+
+    <h3>Cameras — shutter is the whole game</h3>
+    <p>Megapixels don't read plates; <strong>shutter speed</strong> does. Need ~1/1000s, 1/2000s for night/fast, plus IR (plates are retroreflective) and ~100 pixels-per-foot on the plate. Purpose-built ANPR cams with native RTSP: Dahua/EmpireTech LPR line (ITC215-PW6M-IRLZF ≈ $300–450), with Amcrest/Reolink fine for slow approaches. Fixed lens at 55+ mph is where DIY breaks — buy motorized zoom. Solar+LTE poles for no-power sites, same as Flock's Falcon.</p>
+    <p class="flag"><b>Verify before you buy</b> &nbsp;NDAA Section 889 bars Hikvision/Dahua for federal agencies and federally-funded buys. If any federal grant money ever touches this, that rules out the cheapest cameras. Confirm the current rule and your funding source first.</p>
+  </section>
+
+  <section id="gov">
+    <h2><span class="n">05</span> Governance to copy (and the duds to skip)</h2>
+    <p class="lede">You don't have to invent the oversight layer. The models are mature — copy the ones with teeth, skip the ones that are disclosure theater.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>Model</th><th>What to take</th><th>Lesson</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CCOPS</strong> (ACLU model, ~21 cities)</td><td>Council approval + published use policy before deployment; annual report; approval revisited yearly</td><td>The copyable skeleton for your ordinance</td></tr>
+        <tr><td><strong>Oakland</strong> Privacy Advisory Commission</td><td>A standing, independent body that vets every surveillance proposal; bans NDAs</td><td>The win is institutional, not technical — a body that outlives the fight</td></tr>
+        <tr><td><strong>Somerville, MA</strong></td><td>Evidence collected in violation is excluded from court</td><td>Real enforcement tooth — pair with Arkansas §§1805–1806</td></tr>
+        <tr><td><strong>Seattle</strong> OIG usage review</td><td>Independent office audits actual query logs and publishes the result</td><td>Closest working "publicly reported + independently reviewed" model</td></tr>
+        <tr><td class="k">NYC POST Act</td><td class="k">— skip as a model —</td><td>Disclosure-only, no private action; NYPD just ignores it. Teeth, or it's theater.</td></tr>
+        <tr><td class="k">Fusion centers / LInX</td><td class="k">— cautionary —</td><td>MOU governance with no single accountable auditor = mission creep. A Senate report called fusion-center output "shoddy." Name ONE body accountable for cross-jurisdiction audit.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>If you ever do federate with the county or neighboring towns, the lesson is unanimous: <strong>owner-controlled, opt-in-per-recipient, logged, periodically re-justified sharing</strong> — and one named auditor for anything crossing a jurisdiction line. "The data was already shared with 44 states" is the natural end-state of frictionless federation. Friction is the feature.</p>
+  </section>
+
+  <section id="cost">
+    <h2><span class="n">06</span> Cost, and the line item that actually kills it</h2>
+    <p class="lede">The build is cheap. The thing that sinks DIY government tech isn't the build — it's year three.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th></th><th>Flock (rent)</th><th>Self-hosted (own)</th></tr></thead>
+      <tbody>
+        <tr><td>Per camera / year</td><td>$2,500–3,000, forever</td><td>$300–500 one-time hardware</td></tr>
+        <tr><td>6–10 camera county build</td><td>~$20–30k/yr recurring</td><td>~$15–40k one-time + server</td></tr>
+        <tr><td>Solar+LTE site</td><td>included in sub</td><td>~$800–2,500 each one-time</td></tr>
+        <tr><td>Patching, uptime, storage, 2am</td><td>Flock absorbs it</td><td class="k">You own all of it</td></tr>
+        <tr><td class="k">Maintenance staffing</td><td>—</td><td class="k">The real cost. A named, fingerprint-cleared, permanent fractional FTE.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="flag"><b>The bus-factor-of-one</b> &nbsp;GSA data: as few as 13% of large government IT projects succeed; ~80% of federal IT spend is just keeping legacy systems alive. These projects die when the one person who understands the system leaves — or their CJIS fingerprint check lapses. Flock's whole $3k/camera value proposition <em>is</em> absorbing this. If your maintenance answer is "me, alone, free," the sheriff sees the single point of failure instantly. Budget a real, permanent staffing line or don't pitch the full build — pitch the pilot.</p>
+  </section>
+
+  <section id="plan">
+    <h2><span class="n">07</span> Path to reality</h2>
+    <p class="lede">Sequence that de-risks the two things that actually kill it: compliance and maintenance.</p>
+    <div class="phase"><div class="ph">Now</div><div class="pbody"><div class="ph-t">Prove it on your own lot</div><p>Stand up Frigate + a real LPR camera at an Ozark Cleaners entrance. Legal as a property owner (60-day cap). "It's already reading plates at my shop — come look" beats any slide. This is your demo and your learning curve, at zero public risk.</p></div></div>
+    <div class="phase"><div class="ph">Pre-meeting</div><div class="pbody"><div class="ph-t">Call ACIC about Indirect Access</div><p>Confirm the hotlist-matching workflow lives on their side. This is the answer that makes "is it legal / is it CJIS-compliant" a solved question instead of a hand-wave. Don't walk in without it.</p></div></div>
+    <div class="phase"><div class="ph">The room</div><div class="pbody"><div class="ph-t">Pitch the sheriff a county-owned pilot</div><p>Additive, not anti-Flock. Lead with the observability thesis and the Bernalillo feature list. Ask for a small pilot he owns and can shut off. (See the Meeting Brief.)</p></div></div>
+    <div class="phase"><div class="ph">Phase 1</div><div class="pbody"><div class="ph-t">Policy before cameras</div><p>Draft the ordinance with a lawyer: the five pillars as binding commitments, Arkansas §§1805–1807 hooks, Somerville-style exclusion, one named auditor. Write the governance first so the code enforces real rules, not guesses.</p></div></div>
+    <div class="phase"><div class="ph">Phase 2</div><div class="pbody"><div class="ph-t">2–3 camera pilot on one I-30 chokepoint</div><p>Prove plate accuracy at speed, the tamper-evident log, the external-witness root-hash pin, individual auth, case-number validation. Every kill-condition closed and demonstrated on a small scale.</p></div></div>
+    <div class="phase"><div class="ph">Phase 3</div><div class="pbody"><div class="ph-t">Fund the FTE, then expand</div><p>Do not scale past a pilot until the permanent maintenance line is real. That staffing commitment is the difference between sovereign and abandoned. Then publish the first public report and let the result recruit the next jurisdiction.</p></div></div>
+  </section>
+
+  <footer>Companion to the ALPR Meeting Brief · verify Act 668 text, Section 889, and CJIS specifics before relying on them aloud</footer>
+</div>

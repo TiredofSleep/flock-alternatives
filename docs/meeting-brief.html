@@ -1,0 +1,259 @@
+<title>ALPR Meeting Brief</title>
+<style>
+  /* Layout: single-column working brief, stacked cards with a sticky section nav; utilitarian civic document */
+  :root{
+    --bg:#eef1f4;
+    --surface:#ffffff;
+    --surface-2:#f6f8fa;
+    --ink:#161b22;
+    --ink-soft:#4a5560;
+    --line:#d3dae1;
+    --accent:#1f5f8b;       /* steel blue */
+    --accent-soft:#e3edf4;
+    --say:#1b6e4b;          /* green */
+    --say-bg:#e5f3ec;
+    --dont:#a8321f;         /* brick red */
+    --dont-bg:#f7e7e3;
+    --flag:#8a5a00;         /* amber */
+    --flag-bg:#f8eed5;
+    --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+    --body:"Public Sans",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0e1319;--surface:#161c24;--surface-2:#1c242e;--ink:#e8edf2;--ink-soft:#9fadba;
+    --line:#2a343f;--accent:#6fb3dc;--accent-soft:#1a2b38;
+    --say:#5bc08c;--say-bg:#13261d;--dont:#e0876f;--dont-bg:#2a1712;--flag:#d6a844;--flag-bg:#2a2210;
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1319;--surface:#161c24;--surface-2:#1c242e;--ink:#e8edf2;--ink-soft:#9fadba;
+    --line:#2a343f;--accent:#6fb3dc;--accent-soft:#1a2b38;
+    --say:#5bc08c;--say-bg:#13261d;--dont:#e0876f;--dont-bg:#2a1712;--flag:#d6a844;--flag-bg:#2a2210;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:52rem;margin:0 auto;padding-inline:16px;padding-block:28px 60px}
+  header.masthead{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:8px}
+  .kicker{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;font-weight:700;color:var(--accent)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,6vw,2.7rem);line-height:1.02;margin:.25em 0 .15em;text-wrap:balance}
+  .sub{color:var(--ink-soft);font-size:.95rem;max-width:40rem}
+  .meta{font-family:var(--display);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-top:10px}
+  nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:6px;padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:22px}
+  nav a{font-family:var(--display);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;text-decoration:none;color:var(--ink-soft);padding:5px 9px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+  nav a:hover{color:var(--accent);border-color:var(--accent)}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px 20px 22px;margin-bottom:18px}
+  h2{font-family:var(--display);font-weight:800;font-size:1.25rem;margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+  h2 .n{font-size:.8rem;color:var(--accent);font-weight:700}
+  .lede{color:var(--ink-soft);font-size:.9rem;margin:0 0 16px}
+  h3{font-family:var(--display);font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:18px 0 8px}
+  p{margin:0 0 10px}
+  strong{font-weight:700}
+  .people{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .person{border:1px solid var(--line);border-radius:6px;padding:14px;background:var(--surface-2);min-width:0}
+  .person .name{font-family:var(--display);font-weight:800;font-size:1.05rem}
+  .person .role{font-size:.78rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .person ul{margin:0;padding-left:1.1em;font-size:.88rem}
+  .person li{margin-bottom:5px}
+  .tag{display:inline-block;font-family:var(--display);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:3px;margin-bottom:8px}
+  .tag.believer{background:var(--flag-bg);color:var(--flag)}
+  .tag.green{background:var(--say-bg);color:var(--say)}
+  .ask{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:12px}
+  .ask .label{font-family:var(--display);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
+  .ask.rec{border-left-color:var(--say)}
+  .ask.rec .label{color:var(--say)}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .box{border-radius:6px;padding:12px 14px;min-width:0}
+  .box.say{background:var(--say-bg);border:1px solid color-mix(in srgb,var(--say) 35%,transparent)}
+  .box.dont{background:var(--dont-bg);border:1px solid color-mix(in srgb,var(--dont) 35%,transparent)}
+  .box h4{font-family:var(--display);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin:0 0 6px}
+  .box.say h4{color:var(--say)}
+  .box.dont h4{color:var(--dont)}
+  .box p{font-size:.88rem;margin-bottom:0}
+  .quote{font-size:.92rem;font-style:italic}
+  .obj{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+  .obj:first-of-type{border-top:0;padding-top:0;margin-top:0}
+  .obj .q{font-family:var(--display);font-weight:700;font-size:.95rem;margin-bottom:5px}
+  .obj .q::before{content:"“";color:var(--dont)}
+  .obj .q::after{content:"”";color:var(--dont)}
+  .obj .a{font-size:.9rem}
+  .obj .a::before{content:"→ ";color:var(--say);font-weight:700}
+  .flagline{background:var(--flag-bg);color:var(--ink);border-left:4px solid var(--flag);padding:10px 13px;border-radius:0 6px 6px 0;font-size:.86rem;margin:12px 0}
+  .flagline b{color:var(--flag);font-family:var(--display);text-transform:uppercase;font-size:.72rem;letter-spacing:.05em}
+  ul.facts{list-style:none;padding:0;margin:0}
+  ul.facts li{border-bottom:1px solid var(--line);padding:9px 0;font-size:.89rem;display:flex;gap:10px}
+  ul.facts li:last-child{border-bottom:0}
+  ul.facts .fig{font-family:var(--display);font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0;min-width:5.5rem}
+  .script{border:1px dashed var(--line);border-radius:6px;padding:14px;background:var(--surface-2);font-size:.95rem}
+  .script p{margin-bottom:10px}
+  .script p:last-child{margin-bottom:0}
+  .script .who{font-family:var(--display);font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);display:block;margin-bottom:3px}
+  footer{color:var(--ink-soft);font-size:.78rem;text-align:center;margin-top:24px;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em}
+  @media (max-width:560px){.people,.pair{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="kicker">Private Prep — Not a Leave-Behind</div>
+    <h1>The Two Jasons</h1>
+    <p class="sub">Walking into a room where one owns Flock and believes in it, and the other owns nothing yet. Different pitch for each. Don't blur them.</p>
+    <div class="meta">Arkadelphia / Clark County · ALPR ownership · Oct 2026</div>
+  </header>
+
+  <nav>
+    <a href="#room">The Room</a>
+    <a href="#ask">Your Ask</a>
+    <a href="#tracks">Talk Tracks</a>
+    <a href="#obj">Objections</a>
+    <a href="#facts">Facts Cold</a>
+    <a href="#dont">Don't Say</a>
+    <a href="#open">Open / Close</a>
+  </nav>
+
+  <section id="room">
+    <h2><span class="n">01</span> Who's across the table</h2>
+    <p class="lede">They care about different things than you do, and about different things from each other. Read each one before you talk.</p>
+    <div class="people">
+      <div class="person">
+        <span class="tag believer">Committed to Flock</span>
+        <div class="name">Chief "Shorty" Jackson</div>
+        <div class="role">Arkadelphia PD</div>
+        <ul>
+          <li>Bought Flock in 2024 on a <strong>$30,750 Ross Foundation grant</strong> — install + 2 free years.</li>
+          <li>On record this Aug: cameras are "another tool in the toolbox" and "here to stay," even as 6+ AR cities pulled out.</li>
+          <li>Honest tell: he's described a Flock search of his own that came up <strong>fruitless</strong>. He's a realist, not a zealot.</li>
+          <li><strong>Role for you:</strong> reference + reality check. Not your buyer. Do not make him defend his 2024 call.</li>
+        </ul>
+      </div>
+      <div class="person">
+        <span class="tag green">Greenfield</span>
+        <div class="name">Sheriff Jason</div>
+        <div class="role">Clark County — no system yet</div>
+        <ul>
+          <li>County runs <strong>nothing</strong> so far. Nothing to rip out, nobody's judgment to challenge.</li>
+          <li>His whole job is jurisdiction and budget. Both of your best arguments live there.</li>
+          <li><strong>Role for you:</strong> this is your actual customer. Aim the ownership pitch at him.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flagline"><b>Timing wedge</b> &nbsp;2024 + two free years means the grant is running out about now. The first real renewal invoice — the $2.5–3k/camera/year Flock bill the grant was hiding — is landing or about to. That's what turns "own vs. rent" from philosophy into a budget line. You're not interrupting a happy marriage; you're showing up with the invoice.</div>
+  </section>
+
+  <section id="ask">
+    <h2><span class="n">02</span> Pick one ask before you walk in</h2>
+    <p class="lede">The fastest way to waste this meeting is to bring a philosophy instead of a request. Choose your lead ask; the rest become "later."</p>
+    <div class="ask rec">
+      <span class="label">Recommended lead</span>
+      <p style="margin:4px 0 0"><strong>"Let me stand up a small county pilot you'd own."</strong> Lowest risk, aimed at the sheriff, needs nobody to cancel anything. A thing that exists out-argues a thing you're proposing.</p>
+    </div>
+    <div class="ask">
+      <span class="label">Second</span>
+      <p style="margin:4px 0 0"><strong>"Before the county buys into Flock, look at owning instead."</strong> Uses the chief's live system as the worked example of recurring cost.</p>
+    </div>
+    <div class="ask">
+      <span class="label">The big one — only if the room is warm</span>
+      <p style="margin:4px 0 0"><strong>"I want to build and support this for you."</strong> That's a real contract and a real 2am-maintenance commitment. Highest bar. Don't lead here.</p>
+    </div>
+    <div class="flagline"><b>Your real edge</b> &nbsp;You're not an outside vendor from Atlanta. You're a local business owner who writes software and lives in the county. That's standing no Flock rep has. Lean on it — it's the whole reason you get the meeting.</div>
+  </section>
+
+  <section id="tracks">
+    <h2><span class="n">03</span> Translate your three principles into their language</h2>
+    <p class="lede">What moves you is not what moves them. Say the version that lands.</p>
+
+    <h3>Sovereignty → budget control</h3>
+    <div class="pair">
+      <div class="box dont"><h4>You hear</h4><p>"Local and sovereign, nobody owns our data but us."</p></div>
+      <div class="box say"><h4>They hear</h4><p>"You own the hardware, the software, and the evidence. No vendor raises your price at renewal or holds your data hostage."</p></div>
+    </div>
+
+    <h3>No external sharing → liability protection</h3>
+    <div class="pair">
+      <div class="box dont"><h4>You hear</h4><p>"Not being watched by the feds."</p></div>
+      <div class="box say"><h4>They hear</h4><p>"No outside agency is searching your cameras and putting your name on something you never authorized. You control access and you've got the log to prove it."</p></div>
+    </div>
+
+    <h3>Open source → no lock-in</h3>
+    <div class="pair">
+      <div class="box dont"><h4>You hear</h4><p>"Open source, auditable, free as in freedom."</p></div>
+      <div class="box say"><h4>They hear</h4><p>"The next administration can't get surprised by a price hike, and you're not locked to me either. Nobody's stranded."</p></div>
+    </div>
+
+    <div class="flagline"><b>Careful — AR is not a sanctuary state</b> &nbsp;The "keep the feds out" motive that drives you may read as a <em>negative</em> to an Arkansas sheriff who thinks federal cooperation is fine. Don't sell "no ICE." Sell <strong>"no access you didn't approve, by accident, with no paper trail"</strong> — same architecture, sold as control instead of ideology.</div>
+  </section>
+
+  <section id="obj">
+    <h2><span class="n">04</span> The objections that decide it</h2>
+    <p class="lede">Have these cold. Each one has sunk a pitch like yours.</p>
+
+    <div class="obj">
+      <div class="q">But Flock tells us when a stolen car from Little Rock rolls through.</div>
+      <div class="a">Their single most-valued feature, and you're cutting it. Be precise: you <strong>keep the NCIC/ACIC hotlist</strong> — that's the national stolen/wanted/warrant data, and it was never Flock's. What you lose is other <em>Flock customers'</em> camera reads. Know that line exactly; don't overclaim it.</div>
+    </div>
+
+    <div class="obj">
+      <div class="q">Who fixes it at 2am when it goes down?</div>
+      <div class="a">The question that kills every hobbyist pitch. If the honest answer is "me, alone, free," they see the single point of failure instantly. Bring a real answer: a support arrangement, documented handoff, and the fact that open source means they're not stranded if you get hit by a truck. Flock's actual product was never the camera — it was "you don't have to think about any of this."</div>
+    </div>
+
+    <div class="obj">
+      <div class="q">Is this even legal for us to run ourselves?</div>
+      <div class="a">Yes, and the 2025 law fits you almost exactly. <strong>Act 668</strong>: law enforcement can run ALPR, cross-check NCIC/ACIC, 150-day retention cap, <strong>can't sell or transfer data</strong>, twice-yearly public compliance reports. Your audit log isn't just good design — the law already requires the reporting. You build and own; the department is operator of record and runs the hotlist checks under their ACIC credentials.</div>
+    </div>
+
+    <div class="obj">
+      <div class="q">Does this stuff actually work?</div>
+      <div class="a">Cut both ways, honestly. <strong>For:</strong> Sheridan PD recovered 9 stolen vehicles and 2 missing kids in its first months; your own chief credits Flock with recent burglary and stolen-vehicle solves. <strong>Against:</strong> misreads have put innocent people at gunpoint on bad "stolen" hits, and critics argue measured crime impact is minimal. Don't oversell efficacy — you're not selling that cameras work, you're selling who should <em>own</em> the ones they decide to run.</div>
+    </div>
+  </section>
+
+  <section id="facts">
+    <h2><span class="n">05</span> Numbers to have on your tongue</h2>
+    <p class="lede">Say these without hedging. Each is sourced and verifiable — a sheriff will respect that you didn't round.</p>
+    <ul class="facts">
+      <li><span class="fig">$2.5–3k</span><span>Flock's price per camera per year, recurring, forever (Costa Mesa, Moorhead, Shaker Heights contracts).</span></li>
+      <li><span class="fig">$30,750</span><span>The Ross Foundation grant that hid APD's real cost. Covered install + 2 years. That cover is expiring.</span></li>
+      <li><span class="fig">150 days</span><span>Arkansas retention cap under Act 668 (2025). Private property owners: 60 days.</span></li>
+      <li><span class="fig">~$8–12k</span><span>One-time hardware for a 3-camera build. Fixed legal/CJIS/software overhead is the same whether 3 cameras or 30 — which is exactly why county scale beats a tiny city pilot on cost.</span></li>
+      <li><span class="fig">4,000+</span><span>Flock lookups tagged "immigration / ICE+ERO / ICE WARRANT" found in Danville, IL audit logs. Bend, OR: feds hit its database 279 times unauthorized. A "nationwide lookup" setting cities had on without knowing. CA is suing over it.</span></li>
+      <li><span class="fig">$86M</span><span>The Victoria Police plate project an Australian dev matched with open-source OpenALPR. The tech is a decade proven — you're second on tech, first on the ownership model. That's the stronger spot.</span></li>
+      <li><span class="fig">6+</span><span>Arkansas cities that pulled their Flock cameras since July 2026. The political winds are already at your back; you don't have to be the one stirring them.</span></li>
+    </ul>
+  </section>
+
+  <section id="dont">
+    <h2><span class="n">06</span> Do not say</h2>
+    <p class="lede">Any one of these can end it in the first two minutes.</p>
+    <div class="pair">
+      <div class="box dont"><h4>Don't</h4><p>Trash Flock as a surveillance menace. The chief committed to it in print — you'd be insulting his judgment to his face.</p></div>
+      <div class="box say"><h4>Instead</h4><p>"A local-owned option worth understanding before the county expands."</p></div>
+    </div>
+    <div class="pair">
+      <div class="box dont"><h4>Don't</h4><p>Claim CJIS/ACIC compliance is solved or easy. These people live with that burden; you'll mark yourself as someone who's never touched it.</p></div>
+      <div class="box say"><h4>Instead</h4><p>"I'm already working the ACIC path and I know it's the hard part."</p></div>
+    </div>
+    <div class="pair">
+      <div class="box dont"><h4>Don't</h4><p>Promise the statewide network. It's not yours to deliver and it makes you sound grandiose.</p></div>
+      <div class="box say"><h4>Instead</h4><p>"I'll build node one so the network <em>can</em> exist. The county owns a founding seat." (Per-peer, opt-in, logged sharing — a query, not a firehose.)</p></div>
+    </div>
+    <div class="pair">
+      <div class="box dont"><h4>Don't</h4><p>Say "I can probably do it for free / on my own." Free reads as unsupported, and unsupported is the 2am problem.</p></div>
+      <div class="box say"><h4>Instead</h4><p>"Here's what owning it costs, and here's who keeps it alive."</p></div>
+    </div>
+  </section>
+
+  <section id="open">
+    <h2><span class="n">07</span> Opening and closing lines</h2>
+    <p class="lede">Memorize the shape, not the words. Additive, local, concrete.</p>
+    <div class="script">
+      <p><span class="who">Open — defuse first</span>"I'm not here to tell you to pull anything out. I build software, I live here, and I want to show you an option for two moments that are coming — the county deciding whether to buy in, and the city's grant running out."</p>
+      <p><span class="who">The hook — to the sheriff</span>"The tech isn't experimental. Agencies have run open-source plate reading for a decade. What's missing in Clark County is someone local to own it instead of renting from Atlanta. I'm here. Let me prove it on a small pilot you own outright."</p>
+      <p><span class="who">The control line</span>"The difference isn't the camera — it's that when some agency three states over searches your data, you decide whether that's allowed, and you've got the log. A city in California is getting sued right now because Flock had that switch flipped on by default."</p>
+      <p><span class="who">Close — make it cheap to say yes</span>"I'm not asking you to commit to a system today. I'm asking to run a small pilot you can see, own, and shut off if you hate it. Come look at the one already running at my shop's lot."</p>
+    </div>
+    <div class="flagline"><b>Before the meeting</b> &nbsp;Stand up the plate cam at the Ozark lot (legal as a property owner, 60-day cap). "It's already reading plates at my shop — come see it" beats any slide you could build. Get it running this weekend.</div>
+  </section>
+
+  <footer>Prep brief · verify Act 668 current text &amp; APD renewal date before you cite them aloud</footer>
+</div>
