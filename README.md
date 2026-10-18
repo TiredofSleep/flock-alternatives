@@ -22,6 +22,7 @@ someone outside the department can check.**
 | **Switch to a vendor with local storage** | Rekor (local install and processing), Leonardo/ELSAG (local hardware), Axon (local storage option, sharing off by default) | proven, supported; still rented. Bernalillo County NM moved to Axon on these terms | `research/04-build-path-cjis.md` |
 | **County-owned, open source** | commodity LPR cameras + Frigate NVR or fast-alpr on county hardware, with a logged front door, outside witnesses and public reports | the county owns the data and the code; needs a named local maintainer and CJIS diligence | `design/architecture.md`, [civic-lightlog](https://github.com/TiredofSleep/civic-lightlog) |
 | **Hybrid** | a vendor's cameras feeding county-owned storage and audit logging | less to build; depends on the vendor allowing it | `research/04-build-path-cjis.md` |
+| **State-owned (the Arkansas precedent)** | the Arkansas State Police own their plate readers, servers and data under published rules: 150-day cap, logged deletions and sharing, quarterly reports to the Legislative Council | proof that government ownership works in Arkansas; the county plan adds case-number checks, an outside auditor and public sharing reports | `research/07-arkansas-state-police-lpr.md` |
 | **No ALPR** | some cities banned it outright (e.g. Ypsilanti MI) | no data to misuse; loses stolen-vehicle and Amber-alert hits | `research/01-governance-prior-art.md` |
 
 **Whichever option a community picks, the governance is the part that protects people:** a
@@ -52,6 +53,7 @@ oversight failure, not a technology failure.
 | `research/04-build-path-cjis.md` | software, cameras, CJIS and ACIC, vendors, cost, maintenance risk |
 | `research/05-acic-call-prep.md` | questions for the Arkansas Crime Information Center |
 | `research/06-encryption-discussion.md` | transcript: why better encryption isn't the answer (deletion and witnessing are), and where the sentinels came from |
+| `research/07-arkansas-state-police-lpr.md` | the Arkansas precedent: the State Police own and run their own plate-reader system under published rules; what to copy, where the county plan goes further, and open questions |
 | `design/architecture.md` | the county-owned design: one logged front door and the control for each known failure |
 | `design/sentinels.md` | one-way sentinel agents on every machine: forward-secure signed checkpoints to an outside witness, silence as the alarm, canary records |
 | `design/ceremony-protocol.md` | the key ceremony, modeled on ICANN's root key ceremony and scaled to a county: separated roles, 3-of-5 cards across five institutions, two safes, a clean offline laptop, livestreamed |
